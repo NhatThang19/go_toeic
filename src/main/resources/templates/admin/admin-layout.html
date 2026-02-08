@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${pageMeta != null ? pageMeta.title + ' - GoToeic' : 'GoToeic Admin'}">GoToeic</title>
+
+    <script th:src="@{/admin/assets/js/plugin/webfont/webfont.min.js}"></script>
+    <script>
+        WebFont.load({
+            google: {families: ["Public Sans:300,400,500,600,700"]},
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["/admin/assets/css/fonts.min.css"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/sweetalert2/dist/sweetalert2.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/assets/css/kaiadmin.min.css}"/>
+
+    <style>
+        .btn-warning {
+            color: #fff
+        }
+    </style>
+
+    <th:block layout:fragment="styles"></th:block>
+</head>
+
+<body>
+<div class="wrapper">
+
+    <th:block th:replace="~{admin/fragment/_sidebar :: sidebar}"></th:block>
+    <div class="main-panel">
+
+        <th:block th:replace="~{admin/fragment/_navbar :: navbar}"></th:block>
+        <div class="container">
+            <div th:if="${alertMessage != null && !alertMessage.toast}">
+                <div th:classappend="|alert-${alertMessage.type == 'error' ? 'danger' : alertMessage.type}|"
+                     class="alert alert-dismissible fade show mt-3"
+                     role="alert">
+
+                    <span th:text="${alertMessage.message}"></span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <div class="page-inner">
+                <div class="page-header justify-content-between">
+
+                    <h3 class="fw-bold mb-3" th:text="${pageMeta?.title ?: 'Blank Page'}">Title</h3>
+
+                    <ul class="breadcrumbs mb-3"
+                        th:if="${pageMeta != null && pageMeta.breadcrumbs != null && !pageMeta.breadcrumbs.isEmpty()}">
+                        <th:block th:each="crumb, iterStat : ${pageMeta.breadcrumbs}">
+                            <li th:class="${iterStat.first} ? 'nav-home' : 'nav-item'">
+                                <a th:if="${!crumb.active}" th:href="@{${crumb.url}}">
+                                    <i th:if="${iterStat.first}" class="icon-home"></i>
+                                    <th:block th:unless="${iterStat.first}" th:text="${crumb.label}"></th:block>
+                                </a>
+                                <span th:if="${crumb.active}" th:text="${crumb.label}"></span>
+                            </li>
+                            <li class="separator" th:if="${!iterStat.last}">
+                                <i class="icon-arrow-right"></i>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+                <div class="row" layout:fragment="content"></div>
+            </div>
+        </div>
+
+        <th:block th:replace="~{admin/fragment/_footer :: footer}"></th:block>
+
+    </div>
+</div>
+
+<script th:src="@{/admin/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/admin/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/webjars/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/admin/assets/js/kaiadmin.min.js}"></script>
+
+<th:block layout:fragment="scripts"></th:block>
+
+<script th:if="${alertMessage != null && alertMessage.toast}" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const message = /*[[${alertMessage.message}]]*/ '';
+        const type = /*[[${alertMessage.type}]]*/ 'info';
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            icon: type,
+            title: message,
+            customClass: {
+                title: 'swal2-toast-title'
+            }
+        });
+    });
+</script>
+
+<script>
+    function confirmSwal(form, title, text, icon = 'warning') {
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy bỏ',
+            confirmButtonColor: (icon === 'error' || icon === 'warning') ? '#d33' : '#3085d6',
+            cancelButtonColor: '#aaa',
+            customClass: {
+                confirmButton: 'btn btn-primary me-2',
+                cancelButton: 'btn btn-secondary'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

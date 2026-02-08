@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/admin-layout}">
+
+<head>
+    <title th:text="${pageMeta?.title ?: 'Blank'}">Blank</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript"></script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="sidebar" class="sidebar" data-background-color="dark">
+    <div class="sidebar-logo">
+        <div class="logo-header" data-background-color="dark">
+            <a th:href="@{/admin}" class="logo">
+                <svg class="h-10 w-auto navbar-brand" height="20" viewBox="0 0 140 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"
+                          fill="#4F46E5"></path>
+                    <text x="28" y="20" font-family="'Inter', sans-serif" font-weight="800" font-size="20"
+                          fill="#4F46E5">Go
+                        <tspan fill="#0EA5E9">TOEIC</tspan>
+                    </text>
+                </svg>
+            </a>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                </button>
+            </div>
+            <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+            </button>
+        </div>
+    </div>
+    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+
+                <li class="nav-item"
+                    th:classappend="${pageMeta != null && pageMeta.activeMenuItem == 'dashboard' ? 'active' : ''}">
+                    <a th:href="@{/admin}">
+                        <i class="fa fa-home"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
