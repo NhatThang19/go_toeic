@@ -1,5 +1,6 @@
 package com.vn.go_toeic.controller;
 
+import com.vn.go_toeic.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
+    private  final AuthService authService;
+
     @GetMapping("/dang-nhap")
     public String getLoginPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {
