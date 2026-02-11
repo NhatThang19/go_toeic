@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      th:with="activeMenuItem='home'"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--  lib  -->
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}">
+    <link rel="stylesheet" th:href="@{/webjars/sweetalert2/dist/sweetalert2.min.css}">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .active {
+            background-color: #ECE9FA !important;
+            color: #422AD5 !important;
+        }
+
+        .hover-brand:hover {
+            background-color: #ECE9FA !important;
+            color: #422AD5 !important;
+        }
+    </style>
+
+    <th:block layout:fragment="extras-styles"></th:block>
+
+    <title th:text="|${layoutMeta?.title ?: 'Blank'} - GoToeic|">Go TOEIC</title>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+<!-- Top Banner -->
+<div class="bg-[#422AD5] text-white text-sm py-2 px-4 text-center relative z-[51]">
+    <p class="inline-block mr-2">
+        <span class="font-bold bg-white text-[#422AD5] px-2 py-0.5 rounded text-xs mr-2 uppercase tracking-wider">Hot</span>
+        Giảm giá <span class="font-bold text-yellow-300">50%</span> toàn bộ khoá học TOEIC mừng năm học mới!
+    </p>
+    <a href="#" class="underline hover:text-yellow-300 font-medium transition-colors">Đăng ký ngay <i
+            class="fa-solid fa-arrow-right text-xs ml-1"></i></a>
+</div>
+<!-- End Top Banner -->
+
+<!-- Navbar -->
+<div class="navbar bg-base-100/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+
+    <!-- Navbar Start -->
+    <div class="navbar-start">
+        <!-- Mobile Menu -->
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden hover-brand" aria-label="Menu">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </div>
+            <ul tabindex="0"
+                class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-64 p-2 shadow-lg">
+                <li><a th:href="@{/}" th:classappend="${activeMenuItem == 'home'}? 'active' : ''" class="font-bold"><i
+                        class="fa-solid fa-house w-5 text-center"></i>
+                    Trang chủ</a></li>
+                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-book-open w-5 text-center"></i> Khoá học</a>
+                </li>
+                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-pen-to-square w-5 text-center"></i> Luyện
+                    đề</a></li>
+                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-users w-5 text-center"></i> Về chúng tôi</a>
+                </li>
+                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-envelope w-5 text-center"></i> Liên
+                    hệ</a></li>
+            </ul>
+        </div>
+        <!-- End Mobile Menu -->
+
+        <!-- Logo -->
+        <a th:href="@{/}" class="btn btn-ghost text-xl font-bold text-[#422AD5] gap-2 hover:bg-[#ECE9FA]">
+            <i class="fa-solid fa-graduation-cap text-2xl"></i>
+            <span class="tracking-tight">GoToeic</span>
+        </a>
+    </div>
+    <!-- End Navbar Start -->
+
+    <!-- Navbar Center -->
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 gap-1 font-medium">
+            <li>
+                <a th:href="@{/}" th:classappend="${activeMenuItem == 'home'}? 'active' : ''"
+                   class="font-bold rounded-lg">
+                    <i class="fa-solid fa-house text-sm"></i> Trang chủ
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-500 hover-brand transition-all rounded-lg"><i
+                        class="fa-solid fa-book-open text-sm"></i> Khoá học</a>
+            </li>
+            <li>
+                <a class="text-gray-500 hover-brand transition-all rounded-lg"><i
+                        class="fa-solid fa-pen-to-square text-sm"></i> Luyện đề</a>
+            </li>
+            <li><a class="text-gray-500 hover-brand transition-all rounded-lg"><i class="fa-solid fa-users text-sm"></i>
+                Về chúng tôi</a></li>
+            <li><a class="text-gray-500 hover-brand transition-all rounded-lg"><i
+                    class="fa-solid fa-envelope text-sm"></i> Liên hệ</a></li>
+        </ul>
+    </div>
+    <!-- End Navbar Center -->
+
+    <!-- Navbar End -->
+    <div class="navbar-end gap-2">
+        <div sec:authorize="!isAuthenticated()">
+            <!-- Mobile Auth Dropdown -->
+            <div class="dropdown dropdown-end sm:hidden">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle hover-brand">
+                    <i class="fa-regular fa-user text-xl text-gray-600"></i>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-48 p-2 shadow-lg">
+                    <li><a th:href="@{/dang-nhap}" class="text-gray-600 hover-brand"><i
+                            class="fa-solid fa-right-to-bracket w-4"></i> Đăng nhập</a>
+                    </li>
+                    <li><a th:href="@{/dang-ky}" class="text-[#422AD5] font-bold hover-brand"><i
+                            class="fa-solid fa-user-plus w-4"></i> Đăng ký
+                        ngay</a></li>
+                </ul>
+            </div>
+            <!-- End Mobile Auth Dropdown -->
+
+            <!-- Desktop Auth Buttons -->
+            <a th:href="@{/dang-nhap}"
+               class="btn btn-ghost text-gray-600 font-normal hover-brand hidden sm:inline-flex">Đăng nhập</a>
+            <a th:href="@{/dang-ky}"
+               class="btn bg-[#422AD5] border-[#422AD5] hover:bg-[#341eb0] hover:border-[#341eb0] text-white hidden sm:inline-flex shadow-md hover:shadow-lg transition-all">Đăng
+                ký</a>
+            <!-- End Desktop Auth Buttons -->
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <!-- My Courses (Desktop only) -->
+            <a class="btn btn-ghost hidden md:inline-flex text-gray-600 font-normal hover-brand">
+                Khoá học của tôi
+            </a>
+
+            <!-- Notification Dropdown -->
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle hover-brand group">
+                    <div class="indicator">
+                        <i class="fa-regular fa-bell text-xl text-gray-600 group-hover:text-[#422AD5]"></i>
+                        <span class="badge badge-xs indicator-item border-none bg-[#422AD5]"></span>
+                    </div>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-80 p-2 shadow-lg">
+                    <li class="menu-title px-4 py-2 flex flex-row justify-between items-center">
+                        <span>Thông báo mới</span>
+                        <span class="badge badge-sm badge-ghost">3</span>
+                    </li>
+                    <li>
+                        <a class="hover-brand">
+                            <div class="flex flex-col gap-1">
+                                <span class="font-bold text-xs text-[#422AD5]">Học tập</span>
+                                <span class="text-sm">Bạn chưa hoàn thành bài tập về nhà Part 5.</span>
+                                <span class="text-[10px] opacity-50">2 giờ trước</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="hover-brand">
+                            <div class="flex flex-col gap-1">
+                                <span class="font-bold text-xs text-success">Khuyến mãi</span>
+                                <span class="text-sm">Giảm 50% khoá Speaking & Writing chỉ hôm nay!</span>
+                                <span class="text-[10px] opacity-50">1 ngày trước</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="hover-brand">
+                            <div class="flex flex-col gap-1">
+                                <span class="font-bold text-xs text-warning">Hệ thống</span>
+                                <span class="text-sm">Bảo trì hệ thống vào 2:00 AM ngày mai.</span>
+                                <span class="text-[10px] opacity-50">2 ngày trước</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="border-t border-base-200 mt-2">
+                        <a class="justify-center text-[#422AD5] font-bold hover-bg-[#ECE9FA] py-3">Xem tất cả thông
+                            báo</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Notification Dropdown -->
+
+            <!-- User Avatar Dropdown -->
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar hover-brand">
+                    <div class="w-10 rounded-full border border-base-300 ring-2 ring-[#422AD5] ring-offset-2 ring-offset-base-100">
+                        <img alt="User Avatar"
+                             th:src="${currentUser.avatarUrl}"/>
+                    </div>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg">
+                    <li class="menu-title px-2 pb-2 border-b border-base-200 mb-2">
+                        <div class="flex flex-col gap-0">
+                            <span th:text="${currentUser.fullName}"
+                                  class="text-base-content font-bold">Nguyễn Văn A</span>
+                            <span th:text="${currentUser.email}" class="text-xs font-normal opacity-90">hocvien@gotoeic.com</span>
+                        </div>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}" class="hover-brand"><i
+                            class="fa-solid fa-gauge-high w-4 text-center"></i> Trang quản trị viên</a></li>
+                    <li sec:authorize="hasRole('SUPPORTER')"><a th:href="@{/supporter}" class="hover-brand"><i
+                            class="fa-solid fa-gauge-high w-4 text-center"></i> Trang quản trị viên</a></li>
+                    <li><a class="hover-brand"><i class="fa-regular fa-user w-4 text-center"></i> Hồ sơ cá nhân</a></li>
+                    <li><a class="hover-brand"><i class="fa-solid fa-book-open w-4 text-center"></i> Khoá học của
+                        tôi</a></li>
+                    <li><a class="hover-brand"><i class="fa-solid fa-gear w-4 text-center"></i> Cài đặt</a></li>
+                    <li class="mt-2 border-t border-base-200 pt-2">
+                        <form th:action="@{/dang-xuat}" method="post" id="logoutForm" class="hidden">
+                        </form>
+
+                        <a href="javascript:void(0)"
+                           onclick="document.getElementById('logoutForm').submit();"
+                           class="text-error hover-bg-error/10">
+                            <i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End User Avatar Dropdown -->
+        </div>
+    </div>
+    <!-- End Navbar End -->
+
+</div>
+<!-- End Navbar -->
+
+<!--lib-->
+<script th:src="@{/webjars/sweetalert2/dist/sweetalert2.min.js}"></script>
+</body>
+</html>

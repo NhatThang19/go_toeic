@@ -2,7 +2,6 @@ package com.vn.go_toeic.config.security;
 
 import com.vn.go_toeic.config.CustomAuthenticationFailureHandler;
 import com.vn.go_toeic.config.CustomAuthenticationSuccessHandler;
-import com.vn.go_toeic.config.security.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomAuthenticationSuccessHandler successHandler;
     private final CustomAuthenticationFailureHandler failureHandler;
 
@@ -43,7 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/**", "/payment/**")
@@ -73,13 +71,6 @@ public class SecurityConfig {
                         .successHandler(successHandler)
                         .failureHandler(failureHandler)
                         .permitAll())
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/dang-nhap")
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
-                        )
-                        .successHandler(successHandler)
-                )
                 .logout(logout -> logout
                         .logoutUrl("/dang-xuat")
                         .logoutSuccessUrl("/dang-nhap?logout")

@@ -6,24 +6,20 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
-public class CustomUserDetails implements UserDetails, OAuth2User {
+public class CustomUserDetails implements UserDetails {
 
     private final Integer id;
     private final String email;
     private final String fullName;
     private final String password;
-    private final String avatarUrl;
     private final boolean locked;
     private final boolean verified;
-    private final LocalDateTime createdAt;
     private final Collection<? extends GrantedAuthority> authorities;
 
     @Setter
@@ -34,17 +30,13 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
         this.email = user.getEmail();
         this.fullName = user.getFullName();
         this.password = user.getPassword();
-        this.avatarUrl = user.getAvatarUrl();
         this.locked = user.isLocked();
-        this.createdAt = user.getCreatedAt();
         this.verified = user.getVerified();
 
         this.authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
                 .collect(Collectors.toSet());
     }
-
-    // Các phương thức của UserDetails
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -80,17 +72,4 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     public boolean isEnabled() {
         return this.verified;
     }
-
-    // Các phương thức của OAuth2User
-
-    @Override
-    public String getName() {
-        return this.email;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return this.attributes;
-    }
-
 }

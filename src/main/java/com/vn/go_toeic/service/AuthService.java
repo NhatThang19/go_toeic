@@ -69,6 +69,7 @@ public class AuthService {
             if (oldToken.isPresent()) {
                 log.debug("Service: Xóa token xác thực cũ id={} của user {}", oldToken.get().getId(), user.getEmail());
                 tokenRepository.delete(oldToken.get());
+                tokenRepository.flush();
             }
         } else {
             log.info("Service: Tạo mới User entity cho email: {}", req.getEmail());
@@ -87,6 +88,8 @@ public class AuthService {
 
             userService.save(user);
         }
+
+        tokenRepository.findByUser(user);
 
         VerificationToken verificationToken = new VerificationToken(user);
         tokenRepository.save(verificationToken);
