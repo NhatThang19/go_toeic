@@ -17,14 +17,14 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
-        String redirectUrl = "/login?error";
+        String redirectUrl = "/dang-nhap?error";
 
         if (exception instanceof DisabledException) {
-            redirectUrl = "/login?unverified";
+            redirectUrl = "/dang-nhap?unverified";
         } else if (exception instanceof LockedException) {
-            redirectUrl = "/login?locked";
+            redirectUrl = "/dang-nhap?locked";
         } else if (exception instanceof BadCredentialsException) {
-            redirectUrl = "/login?error";
+            redirectUrl = "/dang-nhap?error";
         }
 
         String fullUrl = request.getContextPath() + redirectUrl;

@@ -1,145 +1,96 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="light" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/auth-layout}" lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Go TOEIC</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}">
-
-    <link th:href="@{/css/application.css}" rel="stylesheet" type="text/css"/>
+    <title th:text="${layoutMeta.title}">Đăng nhập</title>
 </head>
+<body>
 
-<body class="bg-base-200 min-h-screen flex items-center justify-center font-sans">
-
-<div class="w-full h-screen flex overflow-hidden bg-base-100">
-    <div class="hidden lg:flex w-1/2 bg-blue-50 relative items-center justify-center p-12 overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
-            <div class="absolute top-20 right-20 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div class="relative z-10 text-center">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"
-                 alt="Login Illustration"
-                 class="w-full max-w-md mx-auto rounded-3xl shadow-2xl mb-8 transform hover:scale-105 transition-transform duration-500 object-cover aspect-[4/3]">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Chào mừng trở lại!</h2>
-            <p class="text-gray-600 max-w-md mx-auto">Tiếp tục hành trình chinh phục điểm số TOEIC mơ ước của bạn ngay
-                hôm nay.</p>
-        </div>
-    </div>
-
-    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-base-100 overflow-y-auto">
-        <div class="w-full max-w-md space-y-6">
-            <div class="text-center">
-                <a href="index.html" class="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
-                    <svg class="h-8 w-auto" viewBox="0 0 140 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"
-                              fill="#4F46E5"/>
-                        <text x="28" y="20" font-family="'Inter', sans-serif" font-weight="800" font-size="20"
-                              fill="#4F46E5">Go
-                            <tspan fill="#0EA5E9">TOEIC</tspan>
-                        </text>
-                    </svg>
-                </a>
-                <h2 class="text-2xl font-bold text-base-content">Đăng nhập tài khoản 🔐</h2>
-                <p class="mt-2 text-sm text-base-content/60">Điền thông tin để truy cập kho đề thi.</p>
-            </div>
-
-            <form class="space-y-4" onsubmit="event.preventDefault(); window.location.href='index.html'">
-
-                <div class="w-full">
-                    <label class="label pt-0">
-                        <span class="label-text font-semibold text-sm text-gray-500">Email</span>
-                    </label>
-
-                    <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
-                        <i class="fa-regular fa-envelope opacity-70"></i>
-                        <input type="email" class="grow border-none outline-none focus:ring-0 text-base-content"
-                               placeholder="name@gmail.com" required/>
-                    </label>
-                </div>
-
-                <div class="w-full">
-                    <label class="label pt-0">
-                        <span class="label-text font-semibold text-sm text-gray-500">Mật khẩu</span>
-                    </label>
-
-                    <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
-                        <i class="fa-solid fa-lock opacity-70"></i>
-
-                        <input id="password-input"
-                               type="password"
-                               class="grow border-none outline-none focus:ring-0 text-base-content"
-                               placeholder="••••••••" required/>
-
-                        <i id="toggle-password"
-                           class="fa-regular fa-eye cursor-pointer opacity-70 hover:opacity-100 transition-opacity"></i>
-                    </label>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="cursor-pointer label justify-start gap-2 p-0">
-                        <input type="checkbox" class="checkbox checkbox-primary checkbox-sm rounded"/>
-                        <span class="label-text text-base-content/70 text-sm">Ghi nhớ đăng nhập</span>
-                    </div>
-                    <a href="#"
-                       class="text-sm font-medium text-primary hover:text-secondary hover:underline transition-colors">
-                        Quên mật khẩu?
-                    </a>
-                </div>
-
-                <button type="submit"
-                        class="btn btn-primary w-full text-white text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 mt-2">
-                    Đăng nhập
-                </button>
-            </form>
-
-            <div class="divider text-sm text-base-content/50">Hoặc đăng nhập với</div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <button class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content gap-2 font-normal">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                    Google
-                </button>
-                <button class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content gap-2 font-normal">
-                    <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" class="w-5 h-5"
-                         alt="Facebook">
-                    Facebook
-                </button>
-            </div>
-
-            <p class="text-center text-sm text-base-content/70">
-                Chưa có tài khoản?
-                <a th:href="@{/dang-ky}" class="font-bold text-primary hover:underline">Đăng ký ngay</a>
-            </p>
-
-            <div class="text-center mt-2">
-                <a href="index.html"
-                   class="text-sm text-base-content/40 hover:text-base-content/70 flex items-center justify-center gap-1 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ
-                </a>
-            </div>
-        </div>
-    </div>
+<div layout:fragment="side-content">
+    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"
+         alt="Login Illustration"
+         class="w-full max-w-md mx-auto rounded-3xl shadow-2xl mb-8 transform hover:scale-105 transition-transform duration-500 object-cover aspect-[4/3]">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">Chào mừng trở lại!</h2>
+    <p class="text-gray-600 max-w-md mx-auto">Tiếp tục hành trình chinh phục điểm số TOEIC mơ ước của bạn.</p>
 </div>
 
-<script>
-    const togglePassword = document.querySelector("#toggle-password");
-    const passwordInput = document.querySelector("#password-input");
+<div layout:fragment="form-header">
+    <h2 class="text-2xl font-bold text-base-content">Đăng nhập tài khoản 🔐</h2>
+    <p class="mt-2 text-sm text-base-content/60">Điền thông tin để truy cập kho đề thi.</p>
+</div>
 
-    togglePassword.addEventListener("click", function () {
-        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
+<div layout:fragment="form-content">
 
-        this.classList.toggle("fa-eye");
-        this.classList.toggle("fa-eye-slash");
-    });
-</script>
+    <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4 text-sm">
+        <i class="fa-solid fa-circle-check"></i>
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-error shadow-sm mb-4 text-sm">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>Email hoặc mật khẩu không chính xác.</span>
+    </div>
+
+    <div th:if="${param.unverified}" class="alert alert-warning shadow-sm mb-4 text-sm">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email.</span>
+    </div>
+
+    <div th:if="${param.locked}" class="alert alert-error shadow-sm mb-4 text-sm">
+        <i class="fa-solid fa-lock"></i>
+        <span>Tài khoản đã bị khóa. Vui lòng liên hệ Admin.</span>
+    </div>
+
+    <div th:if="${param.logout}" class="alert alert-info shadow-sm mb-4 text-sm">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Bạn đã đăng xuất thành công.</span>
+    </div>
+
+    <form class="space-y-4" th:action="@{/dang-nhap}" method="POST">
+        <div class="w-full">
+            <label class="label pt-0"><span class="label-text font-semibold text-sm text-gray-500">Email</span></label>
+            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
+                <i class="fa-regular fa-envelope opacity-70"></i>
+                <input type="email" name="email" class="grow border-none outline-none focus:ring-0 text-base-content"
+                       placeholder="name@gmail.com" required/>
+            </label>
+        </div>
+
+        <div class="w-full">
+            <label class="label pt-0"><span
+                    class="label-text font-semibold text-sm text-gray-500">Mật khẩu</span></label>
+            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
+                <i class="fa-solid fa-lock opacity-70"></i>
+                <input id="login-password" name="password" type="password"
+                       class="grow border-none outline-none focus:ring-0 text-base-content" placeholder="••••••••"
+                       required/>
+                <i onclick="togglePassword('login-password', this)"
+                   class="fa-regular fa-eye cursor-pointer opacity-70 hover:opacity-100 transition-opacity"></i>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <div class="cursor-pointer label justify-start gap-2 p-0">
+                <input type="checkbox" name="remember-me" class="checkbox checkbox-primary checkbox-sm rounded"/>
+                <span class="label-text text-base-content/70 text-sm">Ghi nhớ đăng nhập</span>
+            </div>
+            <a href="#" class="text-sm font-medium text-primary hover:text-secondary hover:underline transition-colors">
+                Quên mật khẩu?
+            </a>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary w-full text-white text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 mt-2">
+            Đăng nhập
+        </button>
+    </form>
+</div>
+
+<p layout:fragment="auth-footer" class="text-center text-sm text-base-content/70">
+    Chưa có tài khoản?
+    <a th:href="@{/dang-ky}" class="font-bold text-primary hover:underline">Đăng ký ngay</a>
+</p>
+
 </body>
 </html>

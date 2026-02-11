@@ -20,7 +20,7 @@ public class AuditingConfig implements AuditorAware<String> {
         if (authentication == null ||
                 !authentication.isAuthenticated() ||
                 authentication instanceof AnonymousAuthenticationToken) {
-            return Optional.empty();
+            return Optional.of("SYSTEM");
         }
 
         return Optional.of(authentication.getName());

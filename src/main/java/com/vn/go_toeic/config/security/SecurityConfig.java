@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/webjars/**", "/admin/assets/**", "/css/**", "/svg/**", "/js/**", "/images/**").permitAll()
 
-                        .requestMatchers("/", "/dang-nhap", "/dang-ky", "/gui-ma-dang-ky", "/gui-lai-ma-dang-ky").permitAll()
+                        .requestMatchers("/", "/dang-nhap", "/dang-ky", "/kiem-tra-email", "/kich-hoat-tai-khoan", "/dang-ky/gui-lai").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/supporter/**").hasRole("SUPPORTER")
@@ -81,8 +81,8 @@ public class SecurityConfig {
                         .successHandler(successHandler)
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/dang-xuat")
+                        .logoutSuccessUrl("/dang-nhap?logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID", "remember-me")
                         .permitAll())
@@ -93,7 +93,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
-                        .expiredUrl("/login?expired"));
+                        .expiredUrl("/dang-nhap?expired"));
 
         return http.build();
     }
