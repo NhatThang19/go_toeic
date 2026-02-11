@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title th:text="${pageMeta != null ? pageMeta.title + ' - GoToeic' : 'GoToeic Admin'}">GoToeic</title>
+    <title th:text="${layoutMeta != null ? layoutMeta.title + ' - GoToeic' : 'GoToeic Admin'}">GoToeic</title>
 
     <script th:src="@{/admin/assets/js/plugin/webfont/webfont.min.js}"></script>
     <script>
@@ -59,11 +59,11 @@
             <div class="page-inner">
                 <div class="page-header justify-content-between">
 
-                    <h3 class="fw-bold mb-3" th:text="${pageMeta?.title ?: 'Blank Page'}">Title</h3>
+                    <h3 class="fw-bold mb-3" th:text="${layoutMeta?.title ?: 'Blank Page'}">Title</h3>
 
                     <ul class="breadcrumbs mb-3"
-                        th:if="${pageMeta != null && pageMeta.breadcrumbs != null && !pageMeta.breadcrumbs.isEmpty()}">
-                        <th:block th:each="crumb, iterStat : ${pageMeta.breadcrumbs}">
+                        th:if="${layoutMeta != null && layoutMeta.breadcrumbs != null && !layoutMeta.breadcrumbs.isEmpty()}">
+                        <th:block th:each="crumb, iterStat : ${layoutMeta.breadcrumbs}">
                             <li th:class="${iterStat.first} ? 'nav-home' : 'nav-item'">
                                 <a th:if="${!crumb.active}" th:href="@{${crumb.url}}">
                                     <i th:if="${iterStat.first}" class="icon-home"></i>
@@ -86,6 +86,7 @@
     </div>
 </div>
 
+<script th:src="@{/admin/assets/js/core/popper.min.js}"></script>
 <script th:src="@{/admin/assets/js/core/jquery-3.7.1.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>

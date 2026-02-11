@@ -34,7 +34,7 @@
             <ul class="nav nav-secondary">
 
                 <li class="nav-item"
-                    th:classappend="${pageMeta != null && pageMeta.activeMenuItem == 'dashboard' ? 'active' : ''}">
+                    th:classappend="${layoutMeta != null && layoutMeta.activeMenuItem == 'dashboard' ? 'active' : ''}">
                     <a th:href="@{/admin}">
                         <i class="fa fa-home"></i>
                         <p>Dashboard</p>
