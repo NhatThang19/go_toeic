@@ -116,7 +116,7 @@
     <!-- End Navbar Center -->
 
     <!-- Navbar End -->
-    <div class="navbar-end gap-2">
+    <div class="navbar-end gap-2 sm:me-4 me-0">
         <div sec:authorize="!isAuthenticated()">
             <!-- Mobile Auth Dropdown -->
             <div class="dropdown dropdown-end sm:hidden">
@@ -146,7 +146,7 @@
 
         <div sec:authorize="isAuthenticated()">
             <!-- My Courses (Desktop only) -->
-            <a class="btn btn-ghost hidden md:inline-flex text-gray-600 font-normal hover-brand">
+            <a class="btn btn-ghost hidden xl:inline-flex text-gray-600 font-normal hover-brand">
                 Khoá học của tôi
             </a>
 
