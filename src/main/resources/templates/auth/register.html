@@ -1,100 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/auth-layout}">
+
 <head>
     <title>Đăng ký</title>
 </head>
+
 <body>
 
-<div layout:fragment="side-content">
-    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop"
-         alt="Register Illustration"
-         class="w-full max-w-md mx-auto rounded-3xl shadow-2xl mb-8 transform hover:scale-105 transition-transform duration-500 object-cover aspect-[4/3]">
-    <h2 class="text-3xl font-bold text-gray-800 mb-4">Gia nhập cộng đồng</h2>
-    <p class="text-gray-600 max-w-md mx-auto">Cùng 15.000+ học viên chinh phục điểm số TOEIC mơ ước.</p>
-</div>
+<div layout:fragment="content">
 
-<div layout:fragment="form-header">
-    <h2 class="text-2xl font-bold text-base-content">Tạo tài khoản mới 🚀</h2>
-    <p class="mt-2 text-sm text-base-content/60">Bắt đầu hành trình học tập miễn phí.</p>
-</div>
+    <h2 class="text-2xl font-bold text-center mb-1 text-gray-800">Tạo tài khoản mới</h2>
+    <p class="text-center text-gray-500 text-sm mb-6">Bắt đầu hành trình chinh phục TOEIC ngay hôm nay.</p>
 
-<div layout:fragment="form-content">
-    <form class="space-y-4" th:action="@{/dang-ky}" th:object="${userRegisterReq}" method="POST">
+    <form th:action="@{/dang-ky}" th:object="${userRegisterReq}" method="POST">
 
-        <div class="w-full">
-            <label class="label pt-0"><span
-                    class="label-text font-semibold text-sm text-gray-500">Họ và tên</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2"
-                   th:classappend="${#fields.hasErrors('fullName')} ? 'input-error'">
-                <i class="fa-regular fa-user opacity-70"></i>
-                <input type="text" th:field="*{fullName}" class="grow border-none outline-none focus:ring-0"
-                       placeholder="Nguyễn Văn A"/>
+        <fieldset class="fieldset w-full mb-3">
+            <legend class="fieldset-legend font-bold text-gray-700">Họ và tên</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2"
+                    th:classappend="${#fields.hasErrors('fullName')} ? 'input-error text-error'">
+                <i class="fa-regular fa-user text-gray-400"></i>
+                <input type="text" th:field="*{fullName}" class="grow" placeholder="Nguyễn Văn A"/>
             </label>
-            <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"
-               class="text-error text-xs mt-1 pl-1"></p>
-        </div>
+            <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-error text-xs mt-1"></p>
+        </fieldset>
 
-        <div class="w-full">
-            <label class="label pt-0"><span class="label-text font-semibold text-sm text-gray-500">Email</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2"
-                   th:classappend="${#fields.hasErrors('email')} ? 'input-error'">
-                <i class="fa-regular fa-envelope opacity-70"></i>
-                <input type="text" th:field="*{email}" class="grow border-none outline-none focus:ring-0"
-                       placeholder="name@gmail.com"/>
+        <fieldset class="fieldset w-full mb-3">
+            <legend class="fieldset-legend font-bold text-gray-700">Email</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2"
+                    th:classappend="${#fields.hasErrors('email')} ? 'input-error text-error'">
+                <i class="fa-regular fa-envelope text-gray-400"></i>
+                <input type="email" th:field="*{email}" class="grow" placeholder="example@email.com"/>
             </label>
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-error text-xs mt-1 pl-1"></p>
-        </div>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-error text-xs mt-1"></p>
+        </fieldset>
 
-        <div class="w-full">
-            <label class="label pt-0"><span
-                    class="label-text font-semibold text-sm text-gray-500">Mật khẩu</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2"
-                   th:classappend="${#fields.hasErrors('password')} ? 'input-error'">
-                <i class="fa-solid fa-lock opacity-70"></i>
-                <input id="reg-password" th:field="*{password}" type="password"
-                       class="grow border-none outline-none focus:ring-0" placeholder="••••••••"/>
-                <i onclick="togglePassword('reg-password', this)"
-                   class="fa-regular fa-eye cursor-pointer opacity-70 hover:opacity-100 transition-opacity"></i>
+        <fieldset class="fieldset w-full mb-3">
+            <legend class="fieldset-legend font-bold text-gray-700">Mật khẩu</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2"
+                    th:classappend="${#fields.hasErrors('password')} ? 'input-error text-error'">
+                <i class="fa-solid fa-lock text-gray-400"></i>
+                <input type="password" th:field="*{password}" id="regPassword" class="grow"
+                       placeholder="••••••••"/>
+                <i id="iconRegPass"
+                   class="fa-regular fa-eye cursor-pointer text-gray-400 hover:text-[#422AD5] transition-colors"
+                   onclick="togglePassword('regPassword', 'iconRegPass')"></i>
             </label>
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-               class="text-error text-xs mt-1 pl-1"></p>
-        </div>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-error text-xs mt-1"></p>
+        </fieldset>
 
-        <div class="w-full">
-            <label class="label pt-0"><span
-                    class="label-text font-semibold text-sm text-gray-500">Nhập lại mật khẩu</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2"
-                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'input-error'">
-                <i class="fa-solid fa-lock opacity-70"></i>
-                <input id="reg-repassword" th:field="*{confirmPassword}" type="password"
-                       class="grow border-none outline-none focus:ring-0" placeholder="••••••••"/>
-                <i onclick="togglePassword('reg-repassword', this)"
-                   class="fa-regular fa-eye cursor-pointer opacity-70 hover:opacity-100 transition-opacity"></i>
+        <fieldset class="fieldset w-full mb-4">
+            <legend class="fieldset-legend font-bold text-gray-700">Nhập lại mật khẩu</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2"
+                    th:classappend="${#fields.hasErrors('confirmPassword')} ? 'input-error text-error'">
+                <i class="fa-solid fa-lock text-gray-400"></i>
+                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" class="grow"
+                       placeholder="••••••••"/>
+                <i id="iconConfirmPass"
+                   class="fa-regular fa-eye cursor-pointer text-gray-400 hover:text-[#422AD5] transition-colors"
+                   onclick="togglePassword('confirmPassword', 'iconConfirmPass')"></i>
             </label>
             <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
-               class="text-error text-xs mt-1 pl-1"></p>
-        </div>
+               class="text-error text-xs mt-1"></p>
+        </fieldset>
 
-        <div class="cursor-pointer label justify-start gap-3">
-            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm rounded" required/>
-            <span class="label-text text-base-content/70 text-sm">
-                Tôi đồng ý với <a href="#" class="link link-primary no-underline hover:underline">Điều khoản</a>.
-            </span>
+        <div class="flex items-start gap-2 mb-6">
+            <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" required/>
+            <span class="text-sm text-gray-600 select-none">
+                    Tôi đồng ý với <a href="#" class="text-[#422AD5] hover:underline">Điều khoản sử dụng</a> và <a
+                    href="#" class="text-[#422AD5] hover:underline">Chính sách bảo mật</a>
+                </span>
         </div>
 
         <button type="submit"
-                class="btn btn-primary w-full text-white text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
-            Đăng ký ngay
+                class="btn w-full border-none hover-brand text-lg font-medium shadow-md shadow-indigo-200">
+            Đăng ký
         </button>
     </form>
+
+    <p class="text-center mt-6 text-sm text-gray-600">
+        Đã có tài khoản?
+        <a th:href="@{/dang-nhap}" class="font-semibold text-brand hover:underline">Đăng nhập ngay</a>
+    </p>
 </div>
 
-<p layout:fragment="auth-footer" class="text-center text-sm text-base-content/70">
-    Đã có tài khoản?
-    <a th:href="@{/dang-nhap}" class="font-bold text-primary hover:underline">Đăng nhập</a>
-</p>
-
 </body>
+
 </html>

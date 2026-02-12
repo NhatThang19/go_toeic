@@ -1,6 +1,6 @@
 package com.vn.go_toeic.service;
 
-import com.vn.go_toeic.dto.EmailReq;
+import com.vn.go_toeic.dto.req.EmailReq;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

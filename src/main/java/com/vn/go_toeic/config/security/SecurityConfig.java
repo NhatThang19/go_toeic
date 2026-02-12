@@ -50,7 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/webjars/**", "/admin/assets/**", "/css/**", "/svg/**", "/js/**", "/images/**").permitAll()
 
-                        .requestMatchers("/", "/dang-nhap", "/dang-ky", "/kiem-tra-email", "/kich-hoat-tai-khoan", "/dang-ky/gui-lai").permitAll()
+                        .requestMatchers("/", "/dang-nhap", "/dang-ky/**", "/kiem-tra-email", "/kich-hoat-tai-khoan",
+                                "/quen-mat-khau/**", "/dat-lai-mat-khau").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/supporter/**").hasRole("SUPPORTER")

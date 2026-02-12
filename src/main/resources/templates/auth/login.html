@@ -1,96 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/auth-layout}" lang="vi">
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/auth-layout}">
+
 <head>
-    <title th:text="${layoutMeta.title}">Đăng nhập</title>
+    <title>Đăng nhập</title>
 </head>
+
 <body>
 
-<div layout:fragment="side-content">
-    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"
-         alt="Login Illustration"
-         class="w-full max-w-md mx-auto rounded-3xl shadow-2xl mb-8 transform hover:scale-105 transition-transform duration-500 object-cover aspect-[4/3]">
-    <h2 class="text-3xl font-bold text-gray-800 mb-4">Chào mừng trở lại!</h2>
-    <p class="text-gray-600 max-w-md mx-auto">Tiếp tục hành trình chinh phục điểm số TOEIC mơ ước của bạn.</p>
-</div>
+<div layout:fragment="content">
 
-<div layout:fragment="form-header">
-    <h2 class="text-2xl font-bold text-base-content">Đăng nhập tài khoản 🔐</h2>
-    <p class="mt-2 text-sm text-base-content/60">Điền thông tin để truy cập kho đề thi.</p>
-</div>
+    <h2 class="text-2xl font-bold text-center mb-1 text-gray-800">Chào mừng trở lại!</h2>
+    <p class="text-center text-gray-500 text-sm mb-6">Vui lòng nhập thông tin để tiếp tục học.</p>
 
-<div layout:fragment="form-content">
-
-    <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4 text-sm">
-        <i class="fa-solid fa-circle-check"></i>
-        <span th:text="${successMessage}"></span>
-    </div>
-
-    <div th:if="${param.error}" class="alert alert-error shadow-sm mb-4 text-sm">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span>Email hoặc mật khẩu không chính xác.</span>
-    </div>
-
-    <div th:if="${param.unverified}" class="alert alert-warning shadow-sm mb-4 text-sm">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        <span>Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email hoặc đăng ký lại.</span>
-    </div>
-
-    <div th:if="${param.locked}" class="alert alert-error shadow-sm mb-4 text-sm">
-        <i class="fa-solid fa-lock"></i>
-        <span>Tài khoản đã bị khóa. Vui lòng liên hệ Admin.</span>
-    </div>
-
-    <div th:if="${param.logout}" class="alert alert-info shadow-sm mb-4 text-sm">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Bạn đã đăng xuất thành công.</span>
-    </div>
-
-    <form class="space-y-4" th:action="@{/dang-nhap}" method="POST">
-        <div class="w-full">
-            <label class="label pt-0"><span class="label-text font-semibold text-sm text-gray-500">Email</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
-                <i class="fa-regular fa-envelope opacity-70"></i>
-                <input type="email" name="email" class="grow border-none outline-none focus:ring-0 text-base-content"
-                       placeholder="name@gmail.com" required/>
-            </label>
+    <div class="mb-2">
+        <div th:if="${successMessage}" class="alert alert-success alert-sm shadow-sm">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${successMessage}"></span>
         </div>
 
-        <div class="w-full">
-            <label class="label pt-0"><span
-                    class="label-text font-semibold text-sm text-gray-500">Mật khẩu</span></label>
-            <label class="input w-full mt-1 focus-within:input-primary focus-within:text-primary flex items-center gap-2 border border-base-300 bg-base-100 rounded-lg px-3 py-2">
-                <i class="fa-solid fa-lock opacity-70"></i>
-                <input id="login-password" name="password" type="password"
-                       class="grow border-none outline-none focus:ring-0 text-base-content" placeholder="••••••••"
+        <div th:if="${param.error}" class="alert alert-error alert-sm shadow-sm text-white">
+            <i class="fa-solid fa-circle-exclamation"></i> <span>Email hoặc mật khẩu không chính xác.</span>
+        </div>
+
+        <div th:if="${param.unverified}" class="alert alert-warning alert-sm shadow-sm">
+            <i class="fa-solid fa-triangle-exclamation"></i> <span>Tài khoản chưa được kích hoạt.</span>
+        </div>
+
+        <div th:if="${param.locked}" class="alert alert-error alert-sm shadow-sm text-white">
+            <i class="fa-solid fa-lock"></i> <span>Tài khoản đã bị khóa. Liên hệ Admin.</span>
+        </div>
+
+        <div th:if="${param.logout}" class="alert alert-info alert-sm shadow-sm">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Bạn đã đăng xuất thành công.</span>
+        </div>
+    </div>
+
+    <form th:action="@{/dang-nhap}" method="POST">
+
+        <fieldset class="fieldset w-full mb-4">
+            <legend class="fieldset-legend font-bold text-gray-700">Email</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2">
+                <i class="fa-regular fa-envelope text-gray-400"></i>
+                <input type="email" name="email" class="grow" placeholder="example@email.com" required/>
+            </label>
+        </fieldset>
+
+        <fieldset class="fieldset w-full mb-4">
+            <legend class="fieldset-legend font-bold text-gray-700">Mật khẩu</legend>
+            <label
+                    class="input w-full bg-base-100 border-gray-300 focus-within:border-[#422AD5] focus-within:outline-none flex items-center gap-2">
+                <i class="fa-solid fa-lock text-gray-400"></i>
+                <input type="password" name="password" id="passwordInput" class="grow" placeholder="••••••••"
                        required/>
-                <i onclick="togglePassword('login-password', this)"
-                   class="fa-regular fa-eye cursor-pointer opacity-70 hover:opacity-100 transition-opacity"></i>
+                <i id="togglePasswordIcon"
+                   class="fa-regular fa-eye cursor-pointer text-gray-400 hover:text-[#422AD5] transition-colors"
+                   onclick="togglePassword()"></i>
             </label>
-        </div>
+        </fieldset>
 
-        <div class="flex items-center justify-between">
-            <div class="cursor-pointer label justify-start gap-2 p-0">
-                <input type="checkbox" name="remember-me" class="checkbox checkbox-primary checkbox-sm rounded"/>
-                <span class="label-text text-base-content/70 text-sm">Ghi nhớ đăng nhập</span>
-            </div>
-            <a href="#" class="text-sm font-medium text-primary hover:text-secondary hover:underline transition-colors">
-                Quên mật khẩu?
-            </a>
+        <div class="flex items-center justify-between mb-8">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="remember-me" class="checkbox checkbox-sm checkbox-primary"/>
+                <span class="text-sm text-gray-600 select-none">Ghi nhớ đăng nhập</span>
+            </label>
+            <a th:href="@{/quen-mat-khau}" class="text-sm font-semibold text-[#422AD5] hover:underline">Quên mật khẩu?</a>
         </div>
 
         <button type="submit"
-                class="btn btn-primary w-full text-white text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 mt-2">
+                class="btn w-full border-none hover-brand text-lg font-medium shadow-md shadow-indigo-200">
             Đăng nhập
         </button>
     </form>
+
+    <p class="text-center mt-6 text-sm text-gray-600">
+        Chưa có tài khoản?
+        <a th:href="@{/dang-ky}" class="font-semibold text-brand hover:underline">Đăng ký miễn phí</a>
+    </p>
 </div>
 
-<p layout:fragment="auth-footer" class="text-center text-sm text-base-content/70">
-    Chưa có tài khoản?
-    <a th:href="@{/dang-ky}" class="font-bold text-primary hover:underline">Đăng ký ngay</a>
-</p>
-
 </body>
+
 </html>

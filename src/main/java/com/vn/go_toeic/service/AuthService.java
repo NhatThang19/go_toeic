@@ -1,7 +1,7 @@
 package com.vn.go_toeic.service;
 
-import com.vn.go_toeic.dto.EmailReq;
-import com.vn.go_toeic.dto.UserRegisterReq;
+import com.vn.go_toeic.dto.req.EmailReq;
+import com.vn.go_toeic.dto.req.UserRegisterReq;
 import com.vn.go_toeic.exception.EmailAlreadyExistsException;
 import com.vn.go_toeic.model.Role;
 import com.vn.go_toeic.model.User;
@@ -9,6 +9,7 @@ import com.vn.go_toeic.model.VerificationToken;
 import com.vn.go_toeic.repository.RoleRepository;
 import com.vn.go_toeic.repository.VerificationTokenRepository;
 import com.vn.go_toeic.util.enums.RoleEnum;
+import com.vn.go_toeic.util.enums.TokenTypeEnum;
 import com.vn.go_toeic.util.mapper.UserMapper;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -39,9 +39,6 @@ public class AuthService {
     @Value("${app.auth.verify-token-expire}")
     private int verifyTokenExpire;
 
-    @Value("${app.auth.resend-token-wait-time}")
-    private int waitTime;
-
     @Value("${app.user.default-avatar-url}")
     private String avatarDefault;
 
@@ -54,7 +51,6 @@ public class AuthService {
 
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
-
             if (existingUser.getVerified()) {
                 throw new EmailAlreadyExistsException("Địa chỉ email này đã được sử dụng và kích hoạt.");
             }
@@ -62,7 +58,6 @@ public class AuthService {
             user = existingUser;
             user.setFullName(req.getFullName());
             user.setPassword(passwordEncoder.encode(req.getPassword()));
-
             userService.save(user);
 
             Optional<VerificationToken> oldToken = tokenRepository.findByUser(user);
@@ -92,86 +87,96 @@ public class AuthService {
         tokenRepository.findByUser(user);
 
         VerificationToken verificationToken = new VerificationToken(user);
+        verificationToken.setType(TokenTypeEnum.VERIFICATION);
         tokenRepository.save(verificationToken);
         log.debug("Service: Đã lưu VerificationToken mới cho user {}", user.getEmail());
 
-        sendEmailToken(user, verificationToken);
+        sendVerificationEmail(user, verificationToken);
     }
 
     @Transactional
     public void verifyAccount(String token) {
-        VerificationToken verificationToken = tokenRepository.findByToken(token)
+        VerificationToken verificationToken = tokenRepository.findByTokenAndType(token, TokenTypeEnum.VERIFICATION)
                 .orElseThrow(() -> {
-                    log.warn("Service: Token không tồn tại hoặc không hợp lệ: {}", token);
-                    return new RuntimeException("Token không hợp lệ hoặc không tồn tại.");
+                    log.warn("Service: Token xác thực không tồn tại hoặc sai loại: {}", token);
+                    return new RuntimeException("Token kích hoạt không hợp lệ.");
                 });
 
         User user = verificationToken.getUser();
-        log.info("Service: Đang xử lý xác thực cho email: {}", user.getEmail());
 
         if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            log.warn("Service: Token đã hết hạn vào lúc {} cho email {}. Tiến hành xóa token.",
-                    verificationToken.getExpiryDate(), user.getEmail());
-
             tokenRepository.delete(verificationToken);
-            throw new RuntimeException("Token đã hết hạn. Vui lòng đăng ký lại.");
+            throw new RuntimeException("Link kích hoạt đã hết hạn. Vui lòng đăng ký lại hoặc yêu cầu gửi lại mail.");
         }
 
-        if (user.getVerified()) {
-            log.info("Service: User {} đã được kích hoạt trước đó.", user.getEmail());
-        } else {
+        if (!user.getVerified()) {
             user.setVerified(true);
             userService.save(user);
-            log.info("Service: Đã cập nhật trạng thái verified = true cho user {}", user.getEmail());
+            log.info("Service: Đã kích hoạt user {}", user.getEmail());
         }
 
         tokenRepository.delete(verificationToken);
-        log.debug("Service: Đã xóa token xác thực sau khi hoàn tất.");
     }
 
     @Transactional
     public void resendVerificationToken(String email) throws MessagingException {
-        log.info("Service: Bắt đầu xử lý gửi lại token cho email: {}", email);
-
         User user = userService.findByEmail(email)
-                .orElseThrow(() -> {
-                    log.warn("Service: Yêu cầu gửi lại thất bại - Email không tồn tại: {}", email);
-                    return new RuntimeException("Email không tồn tại trong hệ thống.");
-                });
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại."));
 
         if (user.getVerified()) {
-            log.warn("Service: Yêu cầu gửi lại thất bại - Tài khoản {} đã được kích hoạt trước đó.", email);
-            throw new RuntimeException("Tài khoản này đã được kích hoạt.");
+            throw new RuntimeException("Tài khoản đã được kích hoạt.");
         }
 
-        VerificationToken verificationToken = tokenRepository.findByUser(user)
-                .orElseGet(() -> {
-                    log.info("Service: Không tìm thấy token cũ, tạo mới cho user {}", email);
-                    return new VerificationToken(user);
-                });
-
-        if (verificationToken.getLastSendDate() != null) {
-            long secondsSinceLastSend = Duration.between(verificationToken.getLastSendDate(), LocalDateTime.now()).getSeconds();
-
-            if (secondsSinceLastSend < waitTime) {
-                long waitSeconds = waitTime - secondsSinceLastSend;
-                log.warn("Service: Rate Limit - User {} gửi yêu cầu quá nhanh. Cần chờ thêm {}s", email, waitSeconds);
-                throw new RuntimeException("Vui lòng đợi " + waitSeconds + " giây trước khi gửi lại.");
-            }
-        }
-
-        verificationToken.updateToken();
-        tokenRepository.save(verificationToken);
-
-        log.debug("Service: Đã cập nhật token mới vào database cho user {}", email);
-
-        sendEmailToken(user, verificationToken);
+        generateAndSendToken(user, TokenTypeEnum.VERIFICATION);
     }
 
-    private void sendEmailToken(User user, VerificationToken verificationToken) throws MessagingException {
+    @Transactional
+    public void processForgotPassword(String email) throws MessagingException {
+        log.info("Service: Yêu cầu quên mật khẩu cho email: {}", email);
+
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại trong hệ thống."));
+
+        generateAndSendToken(user, TokenTypeEnum.PASSWORD_RESET);
+    }
+
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        VerificationToken verificationToken = tokenRepository.findByTokenAndType(token, TokenTypeEnum.PASSWORD_RESET)
+                .orElseThrow(() -> new RuntimeException("Token đặt lại mật khẩu không hợp lệ."));
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Link đặt lại mật khẩu đã hết hạn.");
+        }
+
+        User user = verificationToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.save(user);
+
+        log.info("Service: Đổi mật khẩu thành công cho user {}", user.getEmail());
+
+        tokenRepository.delete(verificationToken);
+    }
+
+    private void generateAndSendToken(User user, TokenTypeEnum type) throws MessagingException {
+        VerificationToken token = tokenRepository.findByUser(user)
+                .orElse(new VerificationToken(user));
+
+        token.setType(type);
+        token.updateToken();
+        tokenRepository.save(token);
+
+        if (type == TokenTypeEnum.VERIFICATION) {
+            sendVerificationEmail(user, token);
+        } else {
+            sendResetPasswordEmail(user, token);
+        }
+    }
+
+    private void sendVerificationEmail(User user, VerificationToken token) throws MessagingException {
         Map<String, Object> variables = new HashMap<>();
         variables.put("name", user.getFullName());
-        variables.put("link", domain + "/kich-hoat-tai-khoan?token=" + verificationToken.getToken());
+        variables.put("link", domain + "/kich-hoat-tai-khoan?token=" + token.getToken());
         variables.put("verifyTokenExpire", verifyTokenExpire);
 
         EmailReq emailReq = EmailReq.builder()
@@ -181,8 +186,24 @@ public class AuthService {
                 .variables(variables)
                 .build();
 
-        log.info("Service: Đang gửi email xác thực tới {}", user.getEmail());
+        emailService.sendEmail(emailReq);
+    }
 
+    private void sendResetPasswordEmail(User user, VerificationToken token) throws MessagingException {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", user.getFullName());
+
+        variables.put("link", domain + "/dat-lai-mat-khau?token=" + token.getToken());
+        variables.put("verifyTokenExpire", verifyTokenExpire);
+
+        EmailReq emailReq = EmailReq.builder()
+                .to(user.getEmail())
+                .subject("Yêu cầu đặt lại mật khẩu - GoToeic")
+                .templateName("email/verification-reset-password-email")
+                .variables(variables)
+                .build();
+
+        log.info("Service: Gửi mail reset pass tới {}", user.getEmail());
         emailService.sendEmail(emailReq);
     }
 }

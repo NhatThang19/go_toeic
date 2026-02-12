@@ -1,75 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/auth-layout}" lang="vi">
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/auth-layout}">
+
 <head>
-    <title>Kiểm tra hộp thư đến - Go TOEIC</title>
+    <th:block layout:fragment="extras-styles">
+        <style>
+            .btn-disabled-custom {
+                color: #9CA3AF !important;
+                cursor: not-allowed !important;
+                text-decoration: none !important;
+                pointer-events: none;
+            }
+        </style>
+    </th:block>
+
 </head>
 
 <body>
 
-<div layout:fragment="side-content" class="w-full h-full flex flex-col justify-center items-center text-center">
-    <div class="bg-white/20 backdrop-blur-md p-8 rounded-2xl shadow-lg border border-white/30 max-w-sm">
-        <i class="fa-regular fa-paper-plane text-6xl text-primary mb-6 animate-bounce"></i>
-        <h3 class="text-2xl font-bold text-gray-800 mb-2">Chỉ còn một bước nữa!</h3>
-        <p class="text-gray-600">
-            Xác thực email giúp bảo vệ tài khoản của bạn và đảm bảo chúng tôi có thể hỗ trợ khi cần thiết.
-        </p>
-    </div>
-</div>
+<div layout:fragment="content">
 
-<div layout:fragment="form-header">
-    <div class="flex justify-center mb-4">
-        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-            <i class="fa-solid fa-envelope-circle-check text-4xl text-primary"></i>
+    <div class="my-6 flex justify-center">
+        <div class="w-24 h-24 bg-[#ECE9FA] rounded-full flex items-center justify-center text-[#422AD5] relative">
+            <i class="fa-regular fa-envelope-open fa-3x"></i>
+            <div class="absolute top-0 right-0 bg-green-500 rounded-full p-1.5 border-4 border-white">
+                <i class="fa-solid fa-check text-white text-xs block"></i>
+            </div>
         </div>
     </div>
-    <h2 class="text-3xl font-bold text-base-content">Kiểm tra email</h2>
-    <p class="mt-2 text-base text-base-content/60">
-        Chúng tôi đã gửi liên kết xác thực đến:
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center"
+        th:text="${type == 'RESET_PASSWORD' ? 'Yêu cầu đặt lại mật khẩu' : 'Kiểm tra email của bạn'}">
+        Kiểm tra email của bạn
+    </h2>
+
+    <p class="text-gray-500 text-sm mb-3 leading-relaxed text-center">
+        Chúng tôi đã gửi
+        <span th:text="${type == 'RESET_PASSWORD' ? 'hướng dẫn đặt lại mật khẩu' : 'một liên kết xác thực'}">liên kết</span>
+        đến <br>
+        <span class="font-semibold text-gray-800" th:text="${email ?: 'email@example.com'}">email@example.com</span>
+        <br>
+        <span th:text="${type == 'RESET_PASSWORD' ? 'Vui lòng nhấn vào liên kết để tạo mật khẩu mới.' : 'Vui lòng nhấn vào liên kết để kích hoạt tài khoản.'}"></span>
     </p>
-    <p class="mt-1 font-semibold text-lg text-primary" th:text="${email ?: 'email@example.com'}">email@example.com</p>
-</div>
 
-<div layout:fragment="form-content" class="space-y-6 text-center">
-
-    <div class="alert alert-info shadow-sm text-sm text-left">
-        <div>
-            <i class="fa-solid fa-circle-info"></i>
-            <span>Nhấn vào liên kết trong email để kích hoạt tài khoản. Đường dẫn có hiệu lực trong <span th:text="${verifyTokenExpire}"></span> Phút.</span>
+    <div class="text-center mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-xs font-medium">
+            <i class="fa-regular fa-clock"></i>
+            <span>Liên kết có hiệu lực trong <span th:text="${verifyTokenExpire}">15</span> phút</span>
         </div>
     </div>
 
-    <div class="text-sm text-base-content/70">
-        <p>Không thấy email?</p>
-        <ul class="list-disc list-inside mt-2 text-left bg-base-200 p-4 rounded-lg">
-            <li>Kiểm tra thư mục <strong>Spam</strong> hoặc <strong>Quảng cáo</strong>.</li>
-            <li>Đợi khoảng vài phút.</li>
-            <li>Đảm bảo bạn đã nhập đúng địa chỉ email.</li>
+    <div class="text-left bg-base-200 p-3 rounded-lg text-xs text-gray-600 mb-6 mx-auto max-w-xs">
+        <p class="font-semibold mb-1">Không thấy email?</p>
+        <ul class="list-disc list-inside space-y-0.5 pl-1">
+            <li>Kiểm tra mục <strong>Spam</strong> hoặc <strong>Quảng cáo</strong>.</li>
+            <li>Đợi khoảng vài phút để thư đến.</li>
         </ul>
     </div>
 
-    <a th:href="@{/dang-nhap}" class="btn btn-primary w-full gap-2">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại Đăng nhập
-    </a>
+    <button class="btn w-full border-none hover-brand text-lg font-medium shadow-md shadow-indigo-200 mb-4"
+            onclick="window.open('https://mail.google.com', '_blank')">
+        Mở Gmail
+    </button>
+
+    <div class="text-sm text-gray-600 mb-6 flex justify-center items-center gap-1">
+        <span>Bạn không nhận được email?</span>
+
+        <form
+                th:action="@{${type == 'RESET_PASSWORD' ? '/quen-mat-khau/gui-lai' : '/dang-ky/gui-lai'}}"
+                method="post">
+            <input type="hidden" name="email" th:value="${email}"/>
+            <button type="submit"
+                    class="font-semibold text-brand hover:underline bg-transparent border-none cursor-pointer p-0 transition-colors">
+                Gửi lại email
+            </button>
+        </form>
+    </div>
+
+    <div class="pt-6 border-t border-gray-100 w-full text-center">
+        <a th:href="@{/dang-nhap}"
+           class="inline-flex items-center justify-center gap-2 text-gray-500 hover:text-[#422AD5] transition-colors font-medium text-sm">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại đăng nhập
+        </a>
+    </div>
 </div>
 
-<div class="text-center text-sm text-base-content/70 h-8 flex items-center justify-center gap-1" layout:fragment="auth-footer">
-    <span>Vẫn chưa nhận được email?</span>
-
-    <span id="resend-countdown" class="text-gray-400 cursor-not-allowed ml-1">
-        Gửi lại sau <span id="timer-count" class="font-bold" th:text="${waitTime}">30</span>s
-    </span>
-
-    <form id="resend-form" th:action="@{/dang-ky/gui-lai}" method="post" class="hidden inline-block">
-        <input type="hidden" name="email" th:value="${email}"/>
-        <button type="submit"
-                id="btn-resend"
-                class="link link-primary font-bold hover:underline ml-1 bg-transparent border-0 cursor-pointer p-0 align-baseline">
-            Gửi lại
-        </button>
-    </form>
-</div>
+<th:block layout:fragment="extras-scripts"></th:block>
 
 </body>
+
 </html>

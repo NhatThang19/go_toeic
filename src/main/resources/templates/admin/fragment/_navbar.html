@@ -108,7 +108,8 @@
                                             </div>
                                             <div class="u-text">
                                                 <h4 th:text="${currentUser.fullName}">Hizrian</h4>
-                                                <p th:text="${currentUser.email}" class="text-muted">hello@example.com</p>
+                                                <p th:text="${currentUser.email}" class="text-muted">
+                                                    hello@example.com</p>
                                             </div>
                                         </div>
                                     </li>
@@ -116,7 +117,8 @@
                                         <div class="dropdown-divider"></div>
                                         <a th:href="@{/}" class="dropdown-item" href="#">Trang chủ</a>
                                         <a th:href="@{/}" class="dropdown-item" href="#">Xem trang cá nhân</a>
-                                        <form th:action="@{/dang-xuat}" method="post" id="logoutForm" class="hidden">
+                                        <form th:action="@{/dang-xuat}" method="post" id="logoutForm"
+                                              class="hidden">
                                         </form>
                                         <a href="javascript:void(0)"
                                            onclick="document.getElementById('logoutForm').submit();"

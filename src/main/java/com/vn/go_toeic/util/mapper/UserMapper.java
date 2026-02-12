@@ -1,10 +1,9 @@
 package com.vn.go_toeic.util.mapper;
 
-import com.vn.go_toeic.dto.UserRegisterReq;
+import com.vn.go_toeic.dto.req.UserRegisterReq;
 import com.vn.go_toeic.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

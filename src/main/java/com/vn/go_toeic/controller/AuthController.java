@@ -1,6 +1,7 @@
 package com.vn.go_toeic.controller;
 
-import com.vn.go_toeic.dto.UserRegisterReq;
+import com.vn.go_toeic.dto.req.ResetPasswordReq;
+import com.vn.go_toeic.dto.req.UserRegisterReq;
 import com.vn.go_toeic.exception.EmailAlreadyExistsException;
 import com.vn.go_toeic.service.AuthService;
 import com.vn.go_toeic.util.AlertMessage;
@@ -26,9 +27,6 @@ public class AuthController {
 
     @Value("${app.auth.verify-token-expire}")
     private int verifyTokenExpire;
-
-    @Value("${app.auth.resend-token-wait-time}")
-    private int waitTime;
 
     @GetMapping("/dang-nhap")
     public String getLoginPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -105,9 +103,13 @@ public class AuthController {
             return "redirect:/";
         }
 
+        if (!model.containsAttribute("type")) {
+            model.addAttribute("type", "VERIFY");
+        }
+
         model.addAttribute("layoutMeta", new LayoutMeta("Kiểm tra email", null, null));
-        model.addAttribute("waitTime", waitTime);
         model.addAttribute("verifyTokenExpire", verifyTokenExpire);
+
         return "auth/check-email";
     }
 
@@ -157,6 +159,119 @@ public class AuthController {
         }
 
         redirectAttributes.addFlashAttribute("email", email);
+
+        return "redirect:/kiem-tra-email";
+    }
+
+    @GetMapping("/quen-mat-khau")
+    public String getForgotPasswordPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails != null) {
+            return "redirect:/";
+        }
+        model.addAttribute("layoutMeta", new LayoutMeta("Quên mật khẩu", null, null));
+        return "auth/forgot-password";
+    }
+
+    @PostMapping("/quen-mat-khau")
+    public String handleForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        log.info("Controller: Nhận yêu cầu quên mật khẩu cho email: {}", email);
+
+        try {
+            authService.processForgotPassword(email);
+
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("type", "RESET_PASSWORD");
+
+            return "redirect:/kiem-tra-email";
+
+        } catch (RuntimeException e) {
+            log.warn("Controller: Quên mật khẩu thất bại cho email {}. Lý do: {}", email, e.getMessage());
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorSticky(e.getMessage()));
+            return "redirect:/quen-mat-khau";
+
+        } catch (Exception e) {
+            log.error("Controller: Lỗi hệ thống khi quên mật khẩu: ", e);
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorSticky("Đã có lỗi xảy ra. Vui lòng thử lại."));
+            return "redirect:/quen-mat-khau";
+        }
+    }
+
+    @GetMapping("/dat-lai-mat-khau")
+    public String getResetPasswordPage(@RequestParam(value = "token", required = false) String token,
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
+        if (token == null || token.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorToast("Đường dẫn không hợp lệ."));
+            return "redirect:/dang-nhap";
+        }
+
+        ResetPasswordReq req = new ResetPasswordReq();
+        req.setToken(token);
+        model.addAttribute("resetPasswordReq", req);
+        model.addAttribute("layoutMeta", new LayoutMeta("Đặt lại mật khẩu", null, null));
+        return "auth/reset-password";
+    }
+
+    @PostMapping("/dat-lai-mat-khau")
+    public String handleResetPassword(
+            @Validated(ValidationSequence.class) @ModelAttribute("resetPasswordReq") ResetPasswordReq req,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("layoutMeta", new LayoutMeta("Đặt lại mật khẩu", null, null));
+            return "auth/reset-password";
+        }
+
+        if (!req.getPassword().equals(req.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "error.req", "Mật khẩu xác nhận không khớp.");
+            model.addAttribute("layoutMeta", new LayoutMeta("Đặt lại mật khẩu", null, null));
+            return "auth/reset-password";
+        }
+
+        try {
+            authService.resetPassword(req.getToken(), req.getPassword());
+
+            log.info("Controller: Đặt lại mật khẩu thành công.");
+            redirectAttributes.addFlashAttribute("alertMessage",
+                    AlertMessage.successSticky("Đổi mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới."));
+            return "redirect:/dang-nhap";
+
+        } catch (RuntimeException e) {
+            log.warn("Controller: Đặt lại mật khẩu thất bại: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorSticky(e.getMessage()));
+            return "redirect:/dang-nhap";
+        } catch (Exception e) {
+            log.error("Controller: Lỗi hệ thống khi reset password: ", e);
+            model.addAttribute("alertMessage", AlertMessage.errorToast("Lỗi hệ thống."));
+            return "auth/reset-password";
+        }
+    }
+
+    @PostMapping("/quen-mat-khau/gui-lai")
+    public String resendForgotPasswordToken(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        log.info("Controller: Nhận yêu cầu GỬI LẠI email quên mật khẩu cho: {}", email);
+
+        try {
+            authService.processForgotPassword(email);
+
+            log.info("Controller: Gửi lại email reset password thành công cho: {}", email);
+
+            redirectAttributes.addFlashAttribute("alertMessage",
+                    AlertMessage.successToast("Email hướng dẫn đã được gửi lại thành công!"));
+
+        } catch (RuntimeException e) {
+            log.warn("Controller: Gửi lại thất bại cho email {}. Lý do: {}", email, e.getMessage());
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorToast(e.getMessage()));
+
+        } catch (Exception e) {
+            log.error("Controller: Lỗi hệ thống khi gửi lại email reset pass: ", e);
+            redirectAttributes.addFlashAttribute("alertMessage", AlertMessage.errorToast("Đã có lỗi xảy ra. Vui lòng thử lại sau."));
+        }
+
+        redirectAttributes.addFlashAttribute("email", email);
+        redirectAttributes.addFlashAttribute("type", "RESET_PASSWORD");
 
         return "redirect:/kiem-tra-email";
     }

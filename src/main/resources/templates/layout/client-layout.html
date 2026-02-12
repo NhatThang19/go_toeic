@@ -261,5 +261,65 @@
 
 <!--lib-->
 <script th:src="@{/webjars/sweetalert2/dist/sweetalert2.min.js}"></script>
+
+<script th:if="${alertMessage}" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const msg = /*[[${alertMessage.message}]]*/ 'null';
+        const type = /*[[${alertMessage.type}]]*/ 'info';
+        const style = /*[[${alertMessage.style}]]*/ 'toast';
+
+        let swalConfig = {
+            icon: type,
+            title: msg,
+            buttonsStyling: false,
+            customClass: { confirmButton: 'btn btn-primary' }
+        };
+
+        switch (style) {
+            case 'sticky':
+                swalConfig = {
+                    ...swalConfig,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    timer: null,
+                    width: 'auto'
+                };
+                break;
+
+            case 'modal':
+                swalConfig = {
+                    ...swalConfig,
+                    title: type === 'error' ? 'Lỗi!' : (type === 'success' ? 'Thành công!' : 'Thông báo'),
+                    text: msg,
+                    toast: false,
+                    confirmButtonText: 'Đóng',
+                    showCloseButton: false
+                };
+                break;
+
+            case 'toast':
+            default:
+                swalConfig = {
+                    ...swalConfig,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                };
+                break;
+        }
+
+        Swal.fire(swalConfig);
+    });
+</script>
+
+<th:block layout:fragment="extras-scripts"></th:block>
 </body>
 </html>

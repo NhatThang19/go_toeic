@@ -1,4 +1,4 @@
-package com.vn.go_toeic.dto;
+package com.vn.go_toeic.dto.req;
 
 import lombok.*;
 

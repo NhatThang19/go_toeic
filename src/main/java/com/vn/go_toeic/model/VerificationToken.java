@@ -1,5 +1,6 @@
 package com.vn.go_toeic.model;
 
+import com.vn.go_toeic.util.enums.TokenTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,12 +27,22 @@ public class VerificationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private TokenTypeEnum type;
+
     private LocalDateTime expiryDate;
 
     private LocalDateTime lastSendDate;
 
     public VerificationToken(User user) {
         this.user = user;
+        this.type = TokenTypeEnum.VERIFICATION;
+        this.updateToken();
+    }
+
+    public VerificationToken(User user, TokenTypeEnum type) {
+        this.user = user;
+        this.type = type;
         this.updateToken();
     }
 

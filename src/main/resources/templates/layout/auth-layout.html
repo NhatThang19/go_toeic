@@ -6,72 +6,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="|${layoutMeta?.title ?: 'Blank'} - GoToeic|">Go TOEIC</title>>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!--  lib  -->
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}">
     <link rel="stylesheet" th:href="@{/webjars/sweetalert2/dist/sweetalert2.min.css}">
-    <link th:href="@{/css/application.css}" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+
+        .hover-brand {
+            background-color: #422AD5;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .hover-brand:hover {
+            background-color: #ECE9FA !important;
+            color: #422AD5 !important;
+            border: 1px solid #422AD5;
+        }
+
+        .text-brand {
+            color: #422AD5;
+        }
+
+        .alert-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+    </style>
+
+    <th:block layout:fragment="extras-styles"></th:block>
+
+    <title th:text="|${layoutMeta?.title ?: 'Blank'} - GoToeic|">Go TOEIC</title>
 </head>
 
-<body class="bg-base-200 min-h-screen flex items-center justify-center font-sans">
+<body class="min-h-screen flex items-center justify-center p-4 relative">
 
-<div class="w-full h-screen flex overflow-hidden bg-base-100">
-    <div class="hidden lg:flex w-1/2 bg-blue-50 relative items-center justify-center p-12 overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
-            <div class="absolute top-20 right-20 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+<a th:href="@{/}" class="absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-[#422AD5] transition-colors font-medium text-sm sm:text-base z-10">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Quay về trang chủ</span>
+</a>
+
+<div class="card bg-base-100 w-full max-w-md shadow-xl">
+    <div class="card-body">
+
+        <div class="flex justify-center mb-6">
+            <svg width="145" height="40" viewBox="0 0 145 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#422AD5">
+                    <path d="M18.5 6L3 13.5L18.5 21L34 13.5L18.5 6Z" />
+                    <path d="M7 16.5V20.5C7 20.5 10 25 18.5 25C27 25 30 20.5 30 20.5V16.5" opacity="0.9" />
+                    <path d="M34 13.5V23C34 23.5 33.5 24 33 24H32C31.5 24 31 23.5 31 23V15.5" />
+                    <circle cx="32" cy="24" r="1.5" />
+                </g>
+                <text x="42" y="25" fill="#422AD5" font-family="'Inter', sans-serif" font-weight="700" font-size="22" letter-spacing="-0.025em">GoToeic</text>
+            </svg>
         </div>
 
-        <div class="relative z-10 text-center" layout:fragment="side-content">
-        </div>
+        <div layout:fragment="content"></div>
+
     </div>
+</div>
 
-    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-base-100 overflow-y-auto">
-        <div class="w-full max-w-md space-y-6">
-            <div class="text-center">
-                <a th:href="@{/}" class="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
-                    <svg class="h-8 w-auto" viewBox="0 0 140 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#4F46E5"/>
-                        <text x="28" y="20" font-family="'Inter', sans-serif" font-weight="800" font-size="20" fill="#4F46E5">Go
-                            <tspan fill="#0EA5E9">TOEIC</tspan>
-                        </text>
-                    </svg>
-                </a>
-
-                <div layout:fragment="form-header">
-                    <h2 class="text-2xl font-bold text-base-content">Tiêu đề</h2>
-                    <p class="mt-2 text-sm text-base-content/60">Mô tả ngắn</p>
-                </div>
-            </div>
-
-            <div layout:fragment="form-content">
-            </div>
-
-            <div class="divider text-sm text-base-content/50">Hoặc tiếp tục với</div>
-            <div class="grid grid-cols-2 gap-3">
-                <button type="button" class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content gap-2 font-normal">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                    Google
-                </button>
-                <button type="button" class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content gap-2 font-normal">
-                    <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" class="w-5 h-5" alt="Facebook">
-                    Facebook
-                </button>
-            </div>
-
-            <p class="text-center text-sm text-base-content/70" layout:fragment="auth-footer">
-            </p>
-
-            <div class="text-center mt-2">
-                <a th:href="@{/}" class="text-sm text-base-content/40 hover:text-base-content/70 flex items-center justify-center gap-1 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#ECE9FA] rounded-full blur-[100px] opacity-60"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#ECE9FA] rounded-full blur-[100px] opacity-60"></div>
 </div>
 
 <script th:src="@{/webjars/sweetalert2/dist/sweetalert2.min.js}"></script>
@@ -147,6 +153,6 @@
     }
 </script>
 
-<th:block layout:fragment="local-scripts"></th:block>
+<th:block layout:fragment="extras-scripts"></th:block>
 </body>
 </html>
