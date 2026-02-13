@@ -64,18 +64,22 @@
         Mở Gmail
     </button>
 
-    <div class="text-sm text-gray-600 mb-6 flex justify-center items-center gap-1">
+    <div class="text-sm text-gray-600 mb-6 flex flex-col justify-center items-center gap-2">
         <span>Bạn không nhận được email?</span>
 
-        <form
-                th:action="@{${type == 'RESET_PASSWORD' ? '/quen-mat-khau/gui-lai' : '/dang-ky/gui-lai'}}"
-                method="post">
+        <form th:action="@{${type == 'RESET_PASSWORD' ? '/quen-mat-khau/gui-lai' : '/dang-ky/gui-lai'}}"
+              method="post" id="resendForm">
             <input type="hidden" name="email" th:value="${email}"/>
-            <button type="submit"
-                    class="font-semibold text-brand hover:underline bg-transparent border-none cursor-pointer p-0 transition-colors">
+
+            <button type="submit" id="resendBtn"
+                    class="font-semibold text-brand hover:underline bg-transparent border-none cursor-pointer p-0 transition-colors hidden">
                 Gửi lại email
             </button>
         </form>
+
+        <span id="countdownText" class="text-gray-500">
+            Vui lòng đợi <span id="countdownTimer" class="font-bold text-brand">30</span> giây để gửi lại.
+        </span>
     </div>
 
     <div class="pt-6 border-t border-gray-100 w-full text-center">
@@ -86,8 +90,31 @@
     </div>
 </div>
 
-<th:block layout:fragment="extras-scripts"></th:block>
+<th:block layout:fragment="extras-scripts">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let timeLeft = 30;
+            const countdownTimerEl = document.getElementById('countdownTimer');
+            const countdownTextEl = document.getElementById('countdownText');
+            const resendBtnEl = document.getElementById('resendBtn');
 
+            const startCountdown = () => {
+                const interval = setInterval(() => {
+                    timeLeft--;
+                    countdownTimerEl.textContent = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        countdownTextEl.classList.add('hidden');
+                        resendBtnEl.classList.remove('hidden');
+                    }
+                }, 1000);
+            };
+
+            startCountdown();
+        });
+    </script>
+</th:block>
 </body>
 
 </html>

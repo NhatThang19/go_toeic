@@ -24,7 +24,6 @@ public class RoleDataInitializer {
 
         log.info("Khởi tạo role...");
         roleRepository.save(new Role(RoleEnum.ADMIN));
-        roleRepository.save(new Role(RoleEnum.SUPPORTER));
         roleRepository.save(new Role(RoleEnum.USER));
         log.info("Hoàn tất khởi tạo role.");
     }

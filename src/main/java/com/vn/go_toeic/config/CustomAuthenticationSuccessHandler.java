@@ -26,8 +26,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             targetUrl = "/admin";
         } else if (authorities.stream().anyMatch(a -> Objects.equals(a.getAuthority(), RoleEnum.USER.toString()))) {
             targetUrl = "/";
-        } else if (authorities.stream().anyMatch(a -> Objects.equals(a.getAuthority(), RoleEnum.SUPPORTER.toString()))) {
-            targetUrl = "/supporter";
         }
 
         response.sendRedirect(targetUrl);

@@ -54,7 +54,6 @@ public class SecurityConfig {
                                 "/quen-mat-khau/**", "/dat-lai-mat-khau").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/supporter/**").hasRole("SUPPORTER")
 
                         .requestMatchers(
                                 "/api/**", "/profile", "/checkout",
@@ -63,7 +62,6 @@ public class SecurityConfig {
                         ).authenticated()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/supporter/**").hasRole("SUPPORTER")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/dang-nhap")

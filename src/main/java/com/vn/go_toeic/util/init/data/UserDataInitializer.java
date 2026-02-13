@@ -39,9 +39,6 @@ public class UserDataInitializer {
         Role adminRole = roleRepository.findByName(RoleEnum.ADMIN)
                 .orElseThrow(() -> new RuntimeException("Error: Role ADMIN is not found."));
 
-        Role supporterRole = roleRepository.findByName(RoleEnum.SUPPORTER)
-                .orElseThrow(() -> new RuntimeException("Error: Role SUPPORTER is not found."));
-
         Role userRole = roleRepository.findByName(RoleEnum.USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role USER is not found."));
 
@@ -55,16 +52,6 @@ public class UserDataInitializer {
                 .roles(Set.of(adminRole))
                 .build();
 
-        User supporter = User.builder()
-                .email("support@gotoeic.com")
-                .password(passwordEncoder.encode("123456"))
-                .fullName("Support Team")
-                .verified(true)
-                .locked(false)
-                .avatarUrl(DEFAULT_AVATAR)
-                .roles(Set.of(supporterRole))
-                .build();
-
         User normalUser = User.builder()
                 .email("student@gmail.com")
                 .password(passwordEncoder.encode("123456"))
@@ -75,7 +62,7 @@ public class UserDataInitializer {
                 .roles(Set.of(userRole))
                 .build();
 
-        userRepository.saveAll(List.of(admin, supporter, normalUser));
+        userRepository.saveAll(List.of(admin, normalUser));
 
         log.info("Đã khởi tạo thành công {} Users.", userRepository.count());
     }
