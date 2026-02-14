@@ -73,11 +73,9 @@
                 <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-book-open w-5 text-center"></i> Khoá học</a>
                 </li>
                 <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-pen-to-square w-5 text-center"></i> Luyện
-                    đề</a></li>
-                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-users w-5 text-center"></i> Về chúng tôi</a>
-                </li>
-                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-envelope w-5 text-center"></i> Liên
-                    hệ</a></li>
+                    thi</a></li>
+                <li><a class="text-gray-600 hover-brand"><i class="fa-solid fa-vial w-5 text-center"></i> Test đầu
+                    vào</a></li>
             </ul>
         </div>
         <!-- End Mobile Menu -->
@@ -121,12 +119,10 @@
             </li>
             <li>
                 <a class="text-gray-500 hover-brand transition-all rounded-lg"><i
-                        class="fa-solid fa-pen-to-square text-sm"></i> Luyện đề</a>
+                        class="fa-solid fa-pen-to-square text-sm"></i> Luyện thi</a>
             </li>
-            <li><a class="text-gray-500 hover-brand transition-all rounded-lg"><i class="fa-solid fa-users text-sm"></i>
-                Về chúng tôi</a></li>
-            <li><a class="text-gray-500 hover-brand transition-all rounded-lg"><i
-                    class="fa-solid fa-envelope text-sm"></i> Liên hệ</a></li>
+            <li><a class="text-gray-500 hover-brand transition-all rounded-lg"><i class="fa-solid fa-vial text-sm"></i>
+                Test đầu vào</a></li>
         </ul>
     </div>
     <!-- End Navbar Center -->
@@ -153,7 +149,8 @@
 
             <!-- Desktop Auth Buttons -->
             <a th:href="@{/dang-nhap}"
-               class="btn btn-ghost text-gray-600 font-normal hover-brand hidden sm:inline-flex">Đăng nhập</a>
+               class="btn btn-ghost text-gray-600 font-normal hover-brand hidden sm:inline-flex">Đăng
+                nhập</a>
             <a th:href="@{/dang-ky}"
                class="btn bg-[#422AD5] border-[#422AD5] hover:bg-[#341eb0] hover:border-[#341eb0] text-white hidden sm:inline-flex shadow-md hover:shadow-lg transition-all">Đăng
                 ký</a>
@@ -257,6 +254,103 @@
 
 </div>
 <!-- End Navbar -->
+
+<main class="flex-grow" layout:fragment="content">
+</main>
+
+<footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10 pt-16">
+    <aside class="max-w-xs">
+        <svg width="145" height="40" viewBox="0 0 145 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+             aria-label="GoToeic Logo">
+            <g fill="#422AD5">
+                <path d="M18.5 6L3 13.5L18.5 21L34 13.5L18.5 6Z"/>
+                <path d="M7 16.5V20.5C7 20.5 10 25 18.5 25C27 25 30 20.5 30 20.5V16.5" opacity="0.9"/>
+                <path d="M34 13.5V23C34 23.5 33.5 24 33 24H32C31.5 24 31 23.5 31 23V15.5"/>
+                <circle cx="32" cy="24" r="1.5"/>
+            </g>
+
+            <text x="42" y="25" fill="#422AD5"
+                  font-family="'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="700"
+                  font-size="22" letter-spacing="-0.025em">
+                GoToeic
+            </text>
+        </svg>
+        <p class="mt-4 text-sm leading-relaxed text-gray-600">
+            Nền tảng luyện thi TOEIC hàng đầu với lộ trình cá nhân hóa. Giúp bạn đạt điểm số mục tiêu trong thời
+            gian ngắn nhất.
+        </p>
+    </aside>
+
+    <nav>
+        <h6 class="footer-title text-[#422AD5] opacity-100">Khóa học</h6>
+        <a class="hover-brand block w-fit cursor-pointer">Mock</a>
+    </nav>
+
+    <nav>
+        <h6 class="footer-title text-[#422AD5] opacity-100">Luyện thi</h6>
+        <a class="hover-brand block w-fit cursor-pointer">Mock</a>
+    </nav>
+
+    <nav>
+        <h6 class="footer-title text-[#422AD5] opacity-100">Liên hệ & Hỗ trợ</h6>
+        <a class="hover-brand flex items-center gap-2 w-fit cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>0398018458</span>
+        </a>
+        <a class="hover-brand flex items-center gap-2 w-fit cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <span>lanhatthang1910@gmail.com</span>
+        </a>
+        <a class="hover-brand flex items-center gap-2 w-fit cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>Thái Nguyên, Việt Nam</span>
+        </a>
+    </nav>
+</footer>
+
+<footer class="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
+    <aside class="grid-flow-col items-center">
+        <p>© 2026 <span class="font-bold text-[#422AD5]">GoToeic</span>. All rights reserved.</p>
+    </aside>
+    <nav class="md:place-self-center justify-self-end">
+        <div class="grid grid-flow-col gap-4">
+            <a class="cursor-pointer hover:text-[#422AD5] transition-colors" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+            </a>
+            <a class="cursor-pointer hover:text-[#422AD5] transition-colors" aria-label="Youtube">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                            d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/>
+                    <path d="m10 15 5-3-5-3z"/>
+                </svg>
+            </a>
+            <a class="cursor-pointer hover:text-[#422AD5] transition-colors" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+</footer>
 
 <!--lib-->
 <script th:src="@{/webjars/sweetalert2/dist/sweetalert2.min.js}"></script>
